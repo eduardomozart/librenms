@@ -20,14 +20,81 @@ if (isset($_POST['config'])) {
 }
 ?>
 
+    <style>
+        .oxidized-editor-wrap {
+            display: flex;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .oxidized-line-numbers {
+            padding: 6px 8px;
+            background: #f5f5f5;
+            border-right: 1px solid #ccc;
+            text-align: right;
+            color: #999;
+            user-select: none;
+            overflow: hidden;
+            white-space: pre;
+            min-width: 2em;
+        }
+        .oxidized-editor-wrap textarea {
+            flex: 1;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            padding: 6px 8px;
+            resize: vertical;
+            overflow-y: auto;
+        }
+        .oxidized-editor-wrap textarea:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+
     <form method="post">
         <?php echo csrf_field() ?>
         <div class="form-group">
-            <label for="exampleInputEmail1">Paste your Oxidized yaml config:</label>
-            <textarea name="config" value="config" rows="20" class="form-control" placeholder="Paste your Oxidized yaml config"><?php echo htmlspecialchars((string) $_POST['config']); ?></textarea>
+            <label for="oxidized-config">Paste your Oxidized yaml config:</label>
+            <div class="oxidized-editor-wrap">
+                <div class="oxidized-line-numbers" id="oxidized-line-numbers" aria-hidden="true">1</div>
+                <textarea id="oxidized-config" name="config" rows="20" class="form-control" placeholder="Paste your Oxidized yaml config"><?php echo htmlspecialchars((string) $_POST['config']); ?></textarea>
+            </div>
         </div>
         <button type="submit" class="btn btn-default btn-primary">Validate YAML</button>
     </form>
+
+    <script>
+        (function () {
+            var textarea = document.getElementById('oxidized-config');
+            var gutter   = document.getElementById('oxidized-line-numbers');
+
+            function updateLineNumbers() {
+                var count = textarea.value.split('\n').length;
+                var lines = '';
+                for (var i = 1; i <= count; i++) {
+                    lines += i + (i < count ? '\n' : '');
+                }
+                gutter.textContent = lines;
+            }
+
+            function syncScroll() {
+                gutter.scrollTop = textarea.scrollTop;
+            }
+
+            textarea.addEventListener('input', updateLineNumbers);
+            textarea.addEventListener('scroll', syncScroll);
+
+            updateLineNumbers();
+        })();
+    </script>
 
 <?php
 
