@@ -123,11 +123,34 @@ echo '</table>
 
 ?>
 
+<style>
+body.customoid-modal-open .modal-backdrop {
+    z-index: 1250;
+}
+
+body.customoid-modal-open #create-oid-form.modal,
+body.customoid-modal-open #delete-oid-form.modal {
+    z-index: 1260;
+}
+</style>
+
 <script>
 
-$("[data-toggle='modal'], [data-toggle='popover']").popover({
+const customoidModalSelector = '#create-oid-form, #delete-oid-form';
+
+$(customoidModalSelector).on('show.bs.modal', function () {
+    $('body').addClass('customoid-modal-open');
+});
+
+$(customoidModalSelector).on('hidden.bs.modal', function () {
+    if (!$('.modal.in').length) {
+        $('body').removeClass('customoid-modal-open');
+    }
+});
+
+$("[data-toggle='popover']").popover({
     trigger: 'hover',
-        'placement': 'top'
+    placement: 'top'
 });
 
 function updateResults(rows) {
