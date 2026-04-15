@@ -148,7 +148,7 @@ $(customoidModalSelector).on('hidden.bs.modal', function () {
     }
 });
 
-$("[data-toggle='popover']").popover({
+$('[data-toggle="popover"]').popover({
     trigger: 'hover',
     placement: 'top'
 });
