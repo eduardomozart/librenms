@@ -143,7 +143,7 @@ $(customoidModalSelector).on('show.bs.modal', function () {
 });
 
 $(customoidModalSelector).on('hidden.bs.modal', function () {
-    if (!$('.modal.in').length) {
+    if (!$('.modal.in, .modal.show').length) {
         $('body').removeClass('customoid-modal-open');
     }
 });
